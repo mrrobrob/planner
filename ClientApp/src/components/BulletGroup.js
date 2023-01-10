@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 export const BulletGroup = ({ bullets }) => {
 
@@ -8,8 +8,9 @@ export const BulletGroup = ({ bullets }) => {
                 return <ul><BulletGroup bullets={bullet.bullets} /></ul>;
             case "text":
                 return <li>{bullet.text}</li>;
+            default: 
+                throw new Error(`invalid bullet type : ${bullet.type}`);
         }
     });
 
 }
-

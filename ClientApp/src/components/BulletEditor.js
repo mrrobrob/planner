@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BulletGroup } from './BulletGroup';
 
-export const Counter = () => {
+export const BulletEditor = () => {
 
     const bullets = [];
 
