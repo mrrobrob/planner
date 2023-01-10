@@ -1,7 +1,6 @@
-import React from 'react';
 import { BulletText } from './BulletText';
 
-export const BulletGroup = ({ bulletIds, actions }) => {
+export const BulletGroup = ({ id, bulletIds, actions }) => {
     
     return bulletIds.map(bulletId => {
         const bullet = actions.getBullet(bulletId);
@@ -9,7 +8,7 @@ export const BulletGroup = ({ bulletIds, actions }) => {
             case "group":
                 return <ul key={bullet.id}><BulletGroup {...bullet} actions={actions} /></ul>;
             case "text":
-                return <BulletText key={bullet.id} {...bullet} actions={actions} />;
+                return <BulletText key={bullet.id} {...bullet} groupId={id} actions={actions} />;
             default: 
                 throw new Error(`invalid bullet type : ${bullet.type}`);
         }
