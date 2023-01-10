@@ -4,16 +4,17 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const BulletEditor = () => {
 
-    const rootBullet = ({
-        id: "a",
-        type: "group",
-        bulletIds: ["b", "c"]
-    });
+    const rootContainerId = "a";
 
-    const [activeBullet, setActiveBullet] = useState(rootBullet.id);
+    const [activeBullet, setActiveBullet] = useState(rootContainerId);
 
     const [bullets, setBullets] = useState({
-        "a": rootBullet,
+        "a": {
+            id: "a",
+            type: "group",
+            text: "group A",
+            bulletIds: ["b", "c"]
+        },
         "b": {
             id: "b",
             type: "text",
@@ -22,6 +23,7 @@ export const BulletEditor = () => {
         "c": {
             id: "c",
             type: "group",
+            text: "group C",
             bulletIds: ["d"]
         },
         "d": {
@@ -45,10 +47,64 @@ export const BulletEditor = () => {
 
     const moveBulletAfter = (id, groupId) => {
 
+        if (groupId === rootContainerId) {
+            return;
+        }
+
+        const fromContainer = bullets[groupId];
+        const newFromIds = fromContainer.bulletIds.filter(e=> e !== id);
+
+        const toContainerId = findContainerId(groupId);
+        const toContainer = bullets[toContainerId];
+        let targetIndex = toContainer.bulletIds.indexOf(groupId) + 1;
+        const newToIds = toContainer.bulletIds.slice();
+
+        while (bullets[newToIds[targetIndex]] && bullets[newToIds[targetIndex]].type === "group") {
+            targetIndex++;
+        }
+        newToIds.splice(targetIndex, 0, id);
+
+        setBullets({
+            ...bullets,
+            [groupId]: {
+                ...fromContainer,
+                bulletIds: newFromIds
+            },
+            [toContainerId]: {
+                ...toContainer,
+                bulletIds: newToIds
+            },
+            
+        });
+    }
+
+    const makeBulletGroup = (id) => {
+
+        const newBullet = {
+            id: uuidv4(),
+            type: "text",
+            text: ""
+        };
+
+        setBullets({
+            ...bullets,
+            [id]: {
+                ...bullets[id],
+                type: "group",
+                bulletIds: [newBullet.id]
+            },
+            [newBullet.id]: newBullet
+        });
+
+        setActiveBullet(newBullet.id);
+
     }
 
     const addBulletAfter = (id) => {
-        const containerId = findContainerId(id);
+
+        const current = bullets[id];
+        
+        const containerId = current.type == "group" ? id : findContainerId(id);
 
         const newBullet = {
             id: uuidv4(),
@@ -57,12 +113,15 @@ export const BulletEditor = () => {
         };
 
         const container = bullets[containerId];
-        const targetIndex = container.bulletIds.indexOf(id);
+        let targetIndex = container.bulletIds.indexOf(id) + 1;
         const newIds = container.bulletIds.slice();
-        
-        newIds.splice(targetIndex + 1, 0, newBullet.id);
 
-        
+        while (bullets[newIds[targetIndex]] && bullets[newIds[targetIndex]].type === "group") {
+            targetIndex++;
+        }
+
+        newIds.splice(targetIndex, 0, newBullet.id);
+                
         setBullets({
             ...bullets,
             [containerId]: {
@@ -82,9 +141,10 @@ export const BulletEditor = () => {
         setBulletText,
         moveBulletAfter,
         addBulletAfter,
+        makeBulletGroup,
     };
 
     return <div>
-        <ul><BulletGroup {...rootBullet} actions={actions} /></ul>
+        <ul><BulletGroup {...bullets["a"]} actions={actions} /></ul>
     </div>
 }

@@ -6,7 +6,12 @@ export const BulletGroup = ({ id, bulletIds, actions }) => {
         const bullet = actions.getBullet(bulletId);
         switch (bullet.type) {
             case "group":
-                return <ul key={bullet.id}><BulletGroup {...bullet} actions={actions} /></ul>;
+                return <>
+                    <BulletText {...bullet} groupId={bullet.id} actions={actions} />
+                    <ul key={bullet.id}>
+                        <BulletGroup {...bullet} actions={actions} />
+                    </ul>
+                </>;
             case "text":
                 return <BulletText key={bullet.id} {...bullet} groupId={id} actions={actions} />;
             default: 
