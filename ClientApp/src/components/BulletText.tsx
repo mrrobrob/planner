@@ -1,12 +1,12 @@
 import { ListGroupItem } from 'reactstrap';
 
-export const BulletText = ({ groupId, id, text, actions }) => {
+export const BulletText = ({ groupId, id, text, actions } : any) => {
 
     const handleClick = () => {
         actions.setActiveBullet(id);
     }
 
-    const handleChange = (event) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = event.currentTarget;
 
         actions.setBulletText(id, value);
@@ -22,7 +22,7 @@ export const BulletText = ({ groupId, id, text, actions }) => {
         }
     }
 
-    const handleKeyPress = (event) => {
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         switch (event.key) {
             case "Enter":
                 handleEnterPress();
