@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { BulletGroup } from './BulletGroup';
 import { v4 as uuidv4 } from 'uuid';
+import { ListGroup } from 'reactstrap';
+import { BulletText } from './BulletText';
 
 export const BulletEditor = () => {
 
@@ -52,7 +54,7 @@ export const BulletEditor = () => {
         }
 
         const fromContainer = bullets[groupId];
-        const newFromIds = fromContainer.bulletIds.filter(e=> e !== id);
+        const newFromIds = fromContainer.bulletIds.filter(e => e !== id);
 
         const toContainerId = findContainerId(groupId);
         const toContainer = bullets[toContainerId];
@@ -74,7 +76,7 @@ export const BulletEditor = () => {
                 ...toContainer,
                 bulletIds: newToIds
             },
-            
+
         });
     }
 
@@ -103,8 +105,8 @@ export const BulletEditor = () => {
     const addBulletAfter = (id) => {
 
         const current = bullets[id];
-        
-        const containerId = current.type == "group" ? id : findContainerId(id);
+
+        const containerId = current.type === "group" ? id : findContainerId(id);
 
         const newBullet = {
             id: uuidv4(),
@@ -121,7 +123,7 @@ export const BulletEditor = () => {
         }
 
         newIds.splice(targetIndex, 0, newBullet.id);
-                
+
         setBullets({
             ...bullets,
             [containerId]: {
@@ -144,7 +146,12 @@ export const BulletEditor = () => {
         makeBulletGroup,
     };
 
-    return <div>
-        <ul><BulletGroup {...bullets["a"]} actions={actions} /></ul>
-    </div>
+    const rootBullet = bullets[rootContainerId];
+
+    return <ListGroup>
+        <BulletText {...rootBullet} groupId={rootBullet.id} actions={actions} />
+        <ListGroup style={{ paddingLeft: 20 }} >
+            <BulletGroup {...rootBullet} actions={actions} />
+        </ListGroup>
+    </ListGroup>
 }

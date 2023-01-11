@@ -1,4 +1,5 @@
 import { BulletText } from './BulletText';
+import { ListGroup } from 'reactstrap';
 
 export const BulletGroup = ({ id, bulletIds, actions }) => {
     
@@ -8,9 +9,9 @@ export const BulletGroup = ({ id, bulletIds, actions }) => {
             case "group":
                 return <>
                     <BulletText {...bullet} groupId={bullet.id} actions={actions} />
-                    <ul key={bullet.id}>
+                    <ListGroup style={{ paddingLeft: 20 }} key={bullet.id}>
                         <BulletGroup {...bullet} actions={actions} />
-                    </ul>
+                    </ListGroup>
                 </>;
             case "text":
                 return <BulletText key={bullet.id} {...bullet} groupId={id} actions={actions} />;

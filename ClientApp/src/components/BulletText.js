@@ -1,3 +1,5 @@
+import { ListGroupItem } from 'reactstrap';
+
 export const BulletText = ({ groupId, id, text, actions }) => {
 
     const handleClick = () => {
@@ -30,12 +32,12 @@ export const BulletText = ({ groupId, id, text, actions }) => {
         }
     }
 
-    return <li onClick={handleClick}>
+    return <ListGroupItem onClick={handleClick}>
         {actions.getActiveBullet() === id ?
             <input autoFocus name={`bulletText_${id}`} type="text" onChange={handleChange} onKeyPress={handleKeyPress} value={text} />
             :
             text
         }
-    </li>
+    </ListGroupItem>
 
 }
