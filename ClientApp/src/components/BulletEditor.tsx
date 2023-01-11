@@ -39,7 +39,7 @@ export const BulletEditor = () => {
     ]);
 
     const getBullet = (id: string) => {
-        const bullet = bullets.find(e => e.id == id);
+        const bullet = bullets.find(e => e.id === id);
 
         if (!bullet) {
             throw new Error(`Bullet not found for id : ${id}`);
@@ -74,7 +74,6 @@ export const BulletEditor = () => {
         const toContainerId = findContainerId(groupId);
         const toContainer = getBullet(toContainerId);
 
-
         let targetIndex = toContainer.bulletIds.indexOf(groupId) + 1;
         const newToIds = toContainer.bulletIds.slice();
 
@@ -84,8 +83,8 @@ export const BulletEditor = () => {
         newToIds.splice(targetIndex, 0, id);
 
         setBullets(bullets.map(e =>
-            e.id == fromContainer.id ? { ...fromContainer, bulletIds: newFromIds } :
-                e.id == toContainer.id ? { ...toContainer, bulletIds: newToIds } :
+            e.id === fromContainer.id ? { ...fromContainer, bulletIds: newFromIds } :
+                e.id === toContainer.id ? { ...toContainer, bulletIds: newToIds } :
                     e))
     }
 
@@ -98,7 +97,7 @@ const makeBulletGroup = (id: string) => {
         bulletIds: []
     };
 
-    const newBullets = bullets.map(e => e.id == id ? { ...e, type: "group" as const, bulletIds: [newBullet.id] } : e);
+    const newBullets = bullets.map(e => e.id === id ? { ...e, type: "group" as const, bulletIds: [newBullet.id] } : e);
 
     newBullets.push(newBullet);
     setBullets(newBullets);
@@ -130,7 +129,7 @@ const addBulletAfter = (id: string) => {
 
     newIds.splice(targetIndex, 0, newBullet.id);
 
-    const newBullets = bullets.map(e => e.id == containerId ? { ...e, bulletIds: newIds } : e);
+    const newBullets = bullets.map(e => e.id === containerId ? { ...e, bulletIds: newIds } : e);
     newBullets.push(newBullet);
 
     setBullets(newBullets);
