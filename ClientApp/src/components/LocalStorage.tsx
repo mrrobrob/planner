@@ -8,7 +8,7 @@ export const LocalStorage = ({ rootContainerId, children, initialState }: any) =
 
     useEffect(() => {
         localStorage.setItem(`storage_${rootContainerId}`, JSON.stringify(storage));
-    }, [storage]);
+    }, [storage, rootContainerId]);
 
     const getBullet = (id: string) => {
         const bullet = storage.bullets.find(e => e.id === id);
@@ -34,6 +34,20 @@ export const LocalStorage = ({ rootContainerId, children, initialState }: any) =
         return container.id;
     }
 
+    const getBulletsToRemove = (id: string): string[] => {
+        const bullet = getBullet(id);
+        const idsToRemove = bullet.bulletIds;
+
+        if (idsToRemove.length === 0) {
+            return [id];
+        }
+
+        const results = idsToRemove.flatMap(e => getBulletsToRemove(e));
+        results.push(id);
+        return results;
+
+    }
+
     const moveBulletAfter = (id: string, groupId: string) => {
 
         if (groupId === rootContainerId) {
@@ -55,10 +69,12 @@ export const LocalStorage = ({ rootContainerId, children, initialState }: any) =
                     newActiveBullet = newIds[indexOfId]
                 }
 
+                const bulletsToRemove = getBulletsToRemove(id);
+                const newBullets = storage.bullets.filter(e => bulletsToRemove.includes(e.id) === false);
+
                 setStorage({
                     activeBulletId: newActiveBullet,
-                    bullets: storage.bullets
-                        .filter(e => e.id !== id)
+                    bullets: newBullets
                         .map(e => e.id === groupId ? { ...e, bulletIds: newIds } : e)
                 });
             }
