@@ -88,71 +88,71 @@ export const BulletEditor = () => {
                     e))
     }
 
-const makeBulletGroup = (id: string) => {
+    const makeBulletGroup = (id: string) => {
 
-    const newBullet = {
-        id: uuidv4(),
-        type: "text" as const,
-        text: "",
-        bulletIds: []
-    };
+        const newBullet = {
+            id: uuidv4(),
+            type: "text" as const,
+            text: "",
+            bulletIds: []
+        };
 
-    const newBullets = bullets.map(e => e.id === id ? { ...e, type: "group" as const, bulletIds: [newBullet.id] } : e);
+        const newBullets = bullets.map(e => e.id === id ? { ...e, type: "group" as const, bulletIds: [newBullet.id] } : e);
 
-    newBullets.push(newBullet);
-    setBullets(newBullets);
+        newBullets.push(newBullet);
+        setBullets(newBullets);
 
-    setActiveBullet(newBullet.id);
+        setActiveBullet(newBullet.id);
 
-}
-
-const addBulletAfter = (id: string) => {
-
-    const current = getBullet(id);
-
-    const containerId = current.type === "group" ? id : findContainerId(id);
-
-    const newBullet = {
-        id: uuidv4(),
-        type: "text" as const,
-        text: "",
-        bulletIds: []
-    };
-
-    const container = getBullet(containerId);
-    let targetIndex = container.bulletIds.indexOf(id) + 1;
-    const newIds = container.bulletIds.slice();
-
-    while (newIds.length > targetIndex && getBullet(newIds[targetIndex]).type === "group") {
-        targetIndex++;
     }
 
-    newIds.splice(targetIndex, 0, newBullet.id);
+    const addBulletAfter = (id: string) => {
 
-    const newBullets = bullets.map(e => e.id === containerId ? { ...e, bulletIds: newIds } : e);
-    newBullets.push(newBullet);
+        const current = getBullet(id);
 
-    setBullets(newBullets);
+        const containerId = current.type === "group" ? id : findContainerId(id);
 
-    setActiveBullet(newBullet.id);
-}
+        const newBullet = {
+            id: uuidv4(),
+            type: "text" as const,
+            text: "",
+            bulletIds: []
+        };
 
-const actions = {
-    getActiveBullet: () => activeBullet,
-    setActiveBullet,
-    getBullet,
-    setBulletText,
-    moveBulletAfter,
-    addBulletAfter,
-    makeBulletGroup,
-};
+        const container = getBullet(containerId);
+        let targetIndex = container.bulletIds.indexOf(id) + 1;
+        const newIds = container.bulletIds.slice();
 
-const rootBullet = getBullet(rootContainerId);
+        while (newIds.length > targetIndex && getBullet(newIds[targetIndex]).type === "group") {
+            targetIndex++;
+        }
 
-return <ListGroup>
-    <BulletText {...rootBullet} groupId={rootBullet.id} actions={actions} />
-    <ListGroup style={{ paddingLeft: 20 }} >
-        <BulletGroup {...rootBullet} actions={actions} />
+        newIds.splice(targetIndex, 0, newBullet.id);
+
+        const newBullets = bullets.map(e => e.id === containerId ? { ...e, bulletIds: newIds } : e);
+        newBullets.push(newBullet);
+
+        setBullets(newBullets);
+
+        setActiveBullet(newBullet.id);
+    }
+
+    const actions = {
+        getActiveBullet: () => activeBullet,
+        setActiveBullet,
+        getBullet,
+        setBulletText,
+        moveBulletAfter,
+        addBulletAfter,
+        makeBulletGroup,
+    };
+
+    const rootBullet = getBullet(rootContainerId);
+
+    return <ListGroup>
+        <BulletText {...rootBullet} groupId={rootBullet.id} actions={actions} />
+        <ListGroup style={{ paddingLeft: 20 }} >
+            <BulletGroup {...rootBullet} actions={actions} />
+        </ListGroup>
     </ListGroup>
-</ListGroup>
 }
