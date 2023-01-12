@@ -1,9 +1,10 @@
 import { ListGroupItem } from 'reactstrap';
+import { IBullet, IHasBulletActions, IHasGroupId } from './BulletModels';
 
-export const BulletText = ({ groupId, id, text, actions } : any) => {
+export const BulletText = ({ groupId, id, text, actions }: IHasGroupId & IBullet & IHasBulletActions) => {
 
     const handleClick = () => {
-        actions.setActiveBullet(id);
+        actions.setActiveBulletId(id);
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,7 +19,7 @@ export const BulletText = ({ groupId, id, text, actions } : any) => {
         } else if (text.startsWith(" ")) {
             actions.makeBulletGroup(id);
         } else {
-            actions.addBulletAfter(id);
+            actions.addNewBulletAfter(id);
         }
     }
 
@@ -33,7 +34,7 @@ export const BulletText = ({ groupId, id, text, actions } : any) => {
     }
 
     return <ListGroupItem onClick={handleClick}>
-        {actions.getActiveBullet() === id ?
+        {actions.getActiveBulletId() === id ?
             <input autoFocus name={`bulletText_${id}`} type="text" onChange={handleChange} onKeyPress={handleKeyPress} value={text} />
             :
             text
