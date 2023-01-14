@@ -1,12 +1,12 @@
 import './App.css';
 import { BulletEditor } from './components/BulletEditor';
+import { Header } from './components/Header';
 
 function App() {
     return (
         <div className="App">
-            <div>
-                <BulletEditor />
-            </div>
+            <Header />
+            <BulletEditor />
         </div>
     );
 }
