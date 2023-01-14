@@ -1,1 +1,1 @@
-# planner
+# Simple Planner App

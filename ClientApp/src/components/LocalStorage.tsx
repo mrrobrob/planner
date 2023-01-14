@@ -114,7 +114,7 @@ export const LocalStorage = ({ rootContainerId, children, initialState }: any) =
             bulletIds: []
         };
 
-        const newBullets = storage.bullets.map(e => e.id === id ? { ...e, type: "group" as const, bulletIds: [newBullet.id] } : e);
+        const newBullets = storage.bullets.map(e => e.id === id ? { ...e, type: "group" as const, text: e.text.trim(), bulletIds: [newBullet.id] } : e);
 
         newBullets.push(newBullet);
         setStorage({ activeBulletId: newBullet.id, bullets: newBullets });
