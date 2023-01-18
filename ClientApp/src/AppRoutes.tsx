@@ -1,12 +1,13 @@
 import { BulletEditor } from "./components/BulletEditor";
+import { PlanList } from "./components/PlanList";
 
 const AppRoutes = [
     {
-        index: true,
-        element: <BulletEditor />
+        index: true, 
+        element: <PlanList />
     },
     {
-        path: '/',
+        path: '/plan/:rootContainerId',
         element: <BulletEditor />
     }
 ];

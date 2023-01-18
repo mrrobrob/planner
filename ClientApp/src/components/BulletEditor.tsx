@@ -4,12 +4,19 @@ import { BulletText } from './BulletText';
 import { LocalStorage } from './LocalStorage';
 import { useEffect, useState } from 'react';
 import { IStorage } from './BulletModels';
+import { useParams } from 'react-router-dom';
 
 export const BulletEditor = () => {
 
-    const rootContainerId = "a";
+    const { rootContainerId } = useParams();
+
+    if (!rootContainerId) {
+        throw new Error("Root Container Not Found");
+    }
+
     const [initialState, setInitialState] = useState<IStorage>({
-        activeBulletId: rootContainerId, bullets: [
+        activeBulletId: rootContainerId,
+        bullets: [
             {
                 id: rootContainerId,
                 type: "group",
@@ -17,6 +24,7 @@ export const BulletEditor = () => {
                 bulletIds: []
             }]
     });
+
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
